@@ -16,8 +16,32 @@ public class OthelloScript : MonoBehaviour
     {
         origin = transform.position;
         SpawnBoard(origin, width, height);
+        StartCoroutine(RequestPlayerMove());
     }
 
+    void Update()
+    {
+            
+    }
+
+    IEnumerator RequestPlayerMove()
+    {
+        while(true)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 100))
+                {
+                    hit.transform.GetComponent<TileScript>().TurnTile(TileState.Black);
+                }
+            }
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+    }
+
+    #region Refresh & Spawn Board
     void SpawnBoard(Vector3 origin, int width, int height)
     {
         tileStates = new TileState[width, height];
@@ -50,4 +74,5 @@ public class OthelloScript : MonoBehaviour
             }
         }
     }
+    #endregion
 }
