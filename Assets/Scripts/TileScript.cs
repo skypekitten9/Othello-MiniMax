@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-enum TileState { Black, White, Empty };
+public enum TileState { Black, White, Empty };
 public class TileScript : MonoBehaviour
 {
     TileState tileState;
@@ -14,7 +14,7 @@ public class TileScript : MonoBehaviour
         TurnTile(TileState.Empty);
     }
 
-    void TurnTile(TileState stateToTurn)
+    public void TurnTile(TileState stateToTurn)
     {
         pawn.gameObject.SetActive(true);
         switch (stateToTurn)
