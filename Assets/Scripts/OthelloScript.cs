@@ -50,7 +50,7 @@ public class OthelloScript : MonoBehaviour
                 else StartCoroutine(RequestPlayerMove(TileState.White));
                 break;
             case TileState.White:
-                if (playerOneType == PlayerType.Agent) StartCoroutine(RequestAgentMove(TileState.Black));
+                if (playerTwoType == PlayerType.Agent) StartCoroutine(RequestAgentMove(TileState.Black));
                 else StartCoroutine(RequestPlayerMove(TileState.Black));
                 break;
             default:
@@ -93,6 +93,25 @@ public class OthelloScript : MonoBehaviour
         yield return new WaitForEndOfFrame();
     }
 
+    #region Player Settings
+    public void PlayerVsPlayer()
+    {
+        playerOneType = PlayerType.Human;
+        playerTwoType = PlayerType.Human;
+    }
+
+    public void PlayerVsAgent()
+    {
+        playerOneType = PlayerType.Agent;
+        playerTwoType = PlayerType.Human;
+    }
+
+    public void AgentVsAgent()
+    {
+        playerOneType = PlayerType.Agent;
+        playerTwoType = PlayerType.Agent;
+    }
+    #endregion
     #region Refresh & Spawn Board
     void SpawnBoard(Vector3 origin, int width, int height)
     {
