@@ -2,28 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerType
-{
-    Human,
-    AI
-}
-
 public class OthelloScript : MonoBehaviour
 {
-    public PlayerType playerOne;
-    public PlayerType playerTwo;
-
     TileState[,] tileStates;
-
     GameObject[,] tileGameObjects;
     public GameObject tilePrefab;
-
     public int width, height;
     int spacing;
-
     Vector3 origin;
-
-    public bool isPlayerOne;
 
     // Start is called before the first frame update
     void Start()
@@ -35,10 +21,10 @@ public class OthelloScript : MonoBehaviour
 
     void Update()
     {
-         
+            
     }
 
-    IEnumerator RequestPlayerMove(TileState tileState)
+    IEnumerator RequestPlayerMove()
     {
         while(true)
         {
@@ -48,30 +34,11 @@ public class OthelloScript : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 100))
                 {
-                    //hit.collider.gameObject.GetComponent<>();
-                    //MakeMove()
-                    //hit.transform.GetComponent<TileScript>().TurnTile(TileState.Black);
-                    break;
+                    hit.transform.GetComponent<TileScript>().TurnTile(TileState.Black);
                 }
             }
-
             yield return new WaitForSeconds(Time.deltaTime);
         }
-    }
-
-    IEnumerator RequestAIMove()
-    {
-
-
-        yield return new WaitForEndOfFrame();
-    }
-
-    void MakeMove(Vector2 index, TileState tileState)
-    {
-
-        //Judge.checkiflegal(move);
-        //    isPlayerOne = !isPlayerOne;
-        
     }
 
     #region Refresh & Spawn Board
