@@ -7,6 +7,7 @@ public class TileScript : MonoBehaviour
 {
     TileState tileState;
     Transform pawn;
+    IndexPair index;
 
     void Start()
     {
@@ -32,6 +33,16 @@ public class TileScript : MonoBehaviour
                 break;
         }
         tileState = stateToTurn;
+    }
+
+    public void SetIndex(int z, int x)
+    {
+        index = new IndexPair(z, x);
+    }
+
+    public IndexPair GetIndex()
+    {
+        return index;
     }
 
     IEnumerator TestStates()
