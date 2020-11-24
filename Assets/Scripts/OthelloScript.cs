@@ -34,7 +34,7 @@ public class OthelloScript : MonoBehaviour
     {
         if (Judge.IsTilePlayable(board, move, color))
         {
-            tileGameObjects[move.z, move.x].GetComponent<TileScript>().TurnTile(color);
+            tileGameObjects[move.z, move.x].GetComponent<TileScript>().PlaceTile(color);
             board[move.z, move.x] = color;
             return true;
         }
