@@ -10,12 +10,14 @@ public class OthelloScript : MonoBehaviour
     public GameObject tilePrefab;
     public PlayerType playerOneType, playerTwoType;
     public int width, height;
+    bool mousePress;
     int spacing;
     Vector3 origin;
 
     private void Awake()
     {
         origin = transform.position;
+        mousePress = false;
         SpawnBoard(origin, width, height);
     }
     void Start()
@@ -23,11 +25,17 @@ public class OthelloScript : MonoBehaviour
         RequestMove(TileState.White);
     }
 
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0)) mousePress = true;
+    }
+
     bool MakeMove(TileState color, IndexPair move)
     {
         if (Judge.IsTilePlayable(board, move, color))
         {
             tileGameObjects[move.z, move.x].GetComponent<TileScript>().TurnTile(color);
+            board[move.z, move.x] = color;
             return true;
         }
         else return false;
@@ -38,8 +46,12 @@ public class OthelloScript : MonoBehaviour
         switch (previousColor)
         {
             case TileState.Black:
+                if (playerOneType == PlayerType.Agent) StartCoroutine(RequestAgentMove(TileState.White));
+                else StartCoroutine(RequestPlayerMove(TileState.White));
                 break;
             case TileState.White:
+                if (playerOneType == PlayerType.Agent) StartCoroutine(RequestAgentMove(TileState.Black));
+                else StartCoroutine(RequestPlayerMove(TileState.Black));
                 break;
             default:
                 Debug.LogError("Color is neither black or white.");
@@ -49,10 +61,12 @@ public class OthelloScript : MonoBehaviour
 
     IEnumerator RequestPlayerMove(TileState color)
     {
+        yield return new WaitForEndOfFrame();
         while (true)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (mousePress)
             {
+                mousePress = false;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 100))
@@ -75,6 +89,7 @@ public class OthelloScript : MonoBehaviour
         {
 
         } while (false);
+        mousePress = false;
         yield return new WaitForEndOfFrame();
     }
 
