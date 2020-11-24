@@ -40,6 +40,11 @@ public class TileScript : MonoBehaviour
         index = new IndexPair(z, x);
     }
 
+    public IndexPair GetIndex()
+    {
+        return index;
+    }
+
     IEnumerator TestStates()
     {
         TurnTile(TileState.Black);

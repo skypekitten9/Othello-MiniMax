@@ -17,9 +17,4 @@ public static class Judge
     {
         return new List<IndexPair>();
     }
-
-    public static float EvaluateBoard(TileState[,] board)
-    {
-        return 1f;
-    }
 }
