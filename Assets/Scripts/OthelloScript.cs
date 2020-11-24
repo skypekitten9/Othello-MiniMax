@@ -61,6 +61,7 @@ public class OthelloScript : MonoBehaviour
         tileStates[zOffset, xOffset] = TileState.Empty;
         GameObject tile = Instantiate(tilePrefab, gameObject.transform);
         tile.transform.position += offset;
+        tile.GetComponent<TileScript>().SetIndex(zOffset, xOffset);
         tileGameObjects[zOffset, xOffset] = tile;
     }
 

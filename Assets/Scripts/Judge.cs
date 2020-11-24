@@ -4,12 +4,22 @@ using UnityEngine;
 
 public static class Judge
 {
-    public static bool IsTilePlayable(TileState[,] tileStates, int z, int x, TileState turnTo)
+    public static bool IsTilePlayable(TileState[,] board, IndexPair index, TileState turnTo)
     {
-        if(tileStates[z, x] == TileState.Empty)
+        if(board[index.z, index.x] == TileState.Empty)
         {
             return true;
         }
         return false;
+    }
+
+    public static List<IndexPair> GetPlayableTiles(TileState[,] board)
+    {
+        return new List<IndexPair>();
+    }
+
+    public static float EvaluateBoard(TileState[,] board)
+    {
+        return 1f;
     }
 }
