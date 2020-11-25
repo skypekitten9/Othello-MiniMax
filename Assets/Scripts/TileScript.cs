@@ -10,7 +10,7 @@ public class TileScript : MonoBehaviour
     Transform pawn;
     IndexPair index;
 
-    void Start()
+    void Awake()
     {
         pawn = gameObject.GetComponentInChildren<Transform>().Find("Pawn").transform;
         animator = gameObject.GetComponentInChildren<Transform>().Find("Pawn").GetComponent<Animator>();

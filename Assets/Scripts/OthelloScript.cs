@@ -22,6 +22,7 @@ public class OthelloScript : MonoBehaviour
     }
     void Start()
     {
+        SpawnStartPawns(width, height);
         RequestMove(TileState.White);
     }
 
@@ -36,6 +37,7 @@ public class OthelloScript : MonoBehaviour
         {
             tileGameObjects[move.z, move.x].GetComponent<TileScript>().PlaceTile(color);
             board[move.z, move.x] = color;
+            //TurnTiles(move, color);
             return true;
         }
         else return false;
@@ -92,7 +94,63 @@ public class OthelloScript : MonoBehaviour
         mousePress = false;
         yield return new WaitForEndOfFrame();
     }
+    #region Turn Tiles
+     void TurnTiles(IndexPair index, TileState turnTo)
+    {
+        TurnLane(index, turnTo, 0, 1, 1);
+        TurnLane(index, turnTo, 1, 1, 1);
+        TurnLane(index, turnTo, 1, 0, 1);
+        TurnLane(index, turnTo, 1, -1, 1);
+        TurnLane(index, turnTo, 0, -1, 1);
+        TurnLane(index, turnTo, -1, -1, 1);
+        TurnLane(index, turnTo, -1, 0, 1);
+        TurnLane(index, turnTo, -1, 1, 1);
+    }
 
+    bool TurnLane(IndexPair index, TileState turnTo, int directionZ, int directionX, int depth)
+    {
+        if (index.z + (directionZ * depth) >= board.GetLength(0)) return false;
+        if (index.x + (directionX * depth) >= board.GetLength(1)) return false;
+        if (index.z + (directionZ * depth) < 0) return false;
+        if (index.x + (directionX * depth) < 0) return false;
+        Debug.Log(index.z + (directionZ * depth) + " " + index.x + (directionX * depth));
+        switch (turnTo)
+        {
+            case TileState.Black:
+                if (board[index.z + (directionZ * depth), index.x + (directionX * depth)] == TileState.Black && depth > 1) return true;
+                else if (board[index.z + (directionZ * depth), index.x + (directionX * depth)] == TileState.White)
+                {
+                    if (TurnLane(index, turnTo, directionZ, directionX, ++depth))
+                    {
+                        board[index.z + (directionZ * depth), index.x + (directionX * depth)] = turnTo;
+                        tileGameObjects[index.z + (directionZ * depth), index.x + (directionX * depth)].GetComponent<TileScript>().TurnTile(turnTo);
+                        return true;
+                    }
+                    else return false;
+                }
+                else return false;
+            case TileState.White:
+                if (board[index.z + (directionZ * depth), index.x + (directionX * depth)] == TileState.White && depth > 1) return true;
+                else if (board[index.z + (directionZ * depth), index.x + (directionX * depth)] == TileState.Black)
+                {
+                    if (TurnLane(index, turnTo, directionZ, directionX, ++depth))
+                    {
+                        board[index.z + (directionZ * depth), index.x + (directionX * depth)] = turnTo;
+                        tileGameObjects[index.z + (directionZ * depth), index.x + (directionX * depth)].GetComponent<TileScript>().TurnTile(turnTo);
+                        return true;
+                    }
+                    else return false;
+                }
+                else return false;
+            case TileState.Empty:
+                Debug.LogError("Empty tile should not be turned.");
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
+    #endregion
     #region Player Settings
     public void PlayerVsPlayer()
     {
@@ -136,13 +194,21 @@ public class OthelloScript : MonoBehaviour
         tileGameObjects[zOffset, xOffset] = tile;
     }
 
-    void UpdateTiles()
+    void SpawnStartPawns(int width, int height)
+    {
+        board[(width / 2) - 1, (height / 2) - 1] = TileState.White;
+        board[width / 2, height / 2] = TileState.White;
+        board[width / 2, (height / 2) - 1] = TileState.Black;
+        board[(width / 2) - 1, height / 2] = TileState.Black;
+        RefreshTiles();
+    }
+    void RefreshTiles()
     {
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
             {
-                tileGameObjects[j, i].transform.GetComponent<TileScript>().TurnTile(board[j, i]);
+                tileGameObjects[j, i].transform.GetComponent<TileScript>().PlaceTile(board[j, i]);
             }
         }
     }
