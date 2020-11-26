@@ -250,5 +250,10 @@ public class OthelloScript : MonoBehaviour
         }
         
     }
+
+    void ResetBoard()
+    {
+
+    }
     #endregion
 }
