@@ -34,19 +34,14 @@ public class TileScript : MonoBehaviour
 
     public void TurnTile(TileState stateToTurn)
     {
-        animator.enabled = true;
         pawn.gameObject.SetActive(true);
         switch (stateToTurn)
         {
             case TileState.Black:
-                animator.SetBool("flipToWhite", false);
-                animator.SetBool("flipToBlack", true);
-                pawn.rotation = new Quaternion(180, 0, 0, 1);
+                animator.Play("FlipToBlack");
                 break;
             case TileState.White:
-                animator.SetBool("flipToBlack", false);
-                animator.SetBool("flipToWhite", true);
-                pawn.rotation = Quaternion.identity;
+                animator.Play("FlipToWhite");
                 break;
             case TileState.Empty:
                 pawn.gameObject.SetActive(false);
@@ -59,15 +54,14 @@ public class TileScript : MonoBehaviour
 
     public void PlaceTile(TileState stateToTurn)
     {
-        animator.enabled = false;
         pawn.gameObject.SetActive(true);
         switch (stateToTurn)
         {
             case TileState.Black:
-                pawn.rotation = new Quaternion(180, 0, 0, 1);
+                animator.Play("PlaceBlack");
                 break;
             case TileState.White:
-                pawn.rotation = Quaternion.identity;
+                animator.Play("PlaceWhite");
                 break;
             case TileState.Empty:
                 pawn.gameObject.SetActive(false);
