@@ -6,6 +6,8 @@ public static class Judge
 {
     public static bool IsTilePlayable(TileState[,] board, IndexPair index, TileState turnTo)
     {
+        if (index.z >= board.GetLength(0)) return false;
+        if (index.x >= board.GetLength(1)) return false;
         if (board[index.z, index.x] != TileState.Empty) return false;
         if (IsTilePlayable(board, index, turnTo, 0, 1, 1)) return true;
         if (IsTilePlayable(board, index, turnTo, 1, 1, 1)) return true;
@@ -24,7 +26,6 @@ public static class Judge
         if (index.x + (directionX * depth) >= board.GetLength(1)) return false;
         if (index.z + (directionZ * depth) < 0) return false;
         if (index.x + (directionX * depth) < 0) return false;
-        Debug.Log(index.z + (directionZ * depth) + " " + index.x + (directionX * depth));
         switch (turnTo)
         {
             case TileState.Black:

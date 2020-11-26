@@ -10,25 +10,39 @@ public class OthelloScript : MonoBehaviour
     public GameObject tilePrefab;
     public PlayerType playerOneType, playerTwoType;
     public int width, height;
-    bool mousePress;
+    TileState currentColor;
     int spacing;
     Vector3 origin;
 
     private void Awake()
     {
         origin = transform.position;
-        mousePress = false;
+        currentColor = TileState.Black;
         SpawnBoard(origin, width, height);
     }
     void Start()
     {
         SpawnStartPawns(width, height);
-        RequestMove(TileState.White);
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) mousePress = true;
+        IndexPair move = RequestMove(currentColor);
+        if (MakeMove(currentColor, move))
+        {
+            switch (currentColor)
+            {
+                case TileState.Black:
+                    currentColor = TileState.White;
+                    break;
+                case TileState.White:
+                    currentColor = TileState.Black;
+                    break;
+                default:
+                    Debug.LogError("Color is neither black or white.");
+                    break;
+            }
+        }
     }
 
     bool MakeMove(TileState color, IndexPair move)
@@ -37,62 +51,45 @@ public class OthelloScript : MonoBehaviour
         {
             tileGameObjects[move.z, move.x].GetComponent<TileScript>().PlaceTile(color);
             board[move.z, move.x] = color;
-            //TurnTiles(move, color);
             return true;
         }
         else return false;
     }
 
-    void RequestMove(TileState previousColor)
+    IndexPair RequestMove(TileState currentColor)
     {
-        switch (previousColor)
+        switch (currentColor)
         {
             case TileState.Black:
-                if (playerOneType == PlayerType.Agent) StartCoroutine(RequestAgentMove(TileState.White));
-                else StartCoroutine(RequestPlayerMove(TileState.White));
-                break;
+                if (playerOneType == PlayerType.Agent) return RequestAgentMove(TileState.Black);
+                else return RequestPlayerMove(TileState.Black);
             case TileState.White:
-                if (playerTwoType == PlayerType.Agent) StartCoroutine(RequestAgentMove(TileState.Black));
-                else StartCoroutine(RequestPlayerMove(TileState.Black));
-                break;
+                if (playerOneType == PlayerType.Agent) return RequestAgentMove(TileState.White);
+                else return RequestPlayerMove(TileState.White);
             default:
                 Debug.LogError("Color is neither black or white.");
-                break;
+                return new IndexPair(width, height);
         }
+        
     }
 
-    IEnumerator RequestPlayerMove(TileState color)
+    IndexPair RequestPlayerMove(TileState color)
     {
-        yield return new WaitForEndOfFrame();
-        while (true)
+        if (Input.GetMouseButtonDown(0))
         {
-            if (mousePress)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100))
             {
-                mousePress = false;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100))
-                {
-                    if (MakeMove(color, hit.transform.GetComponent<TileScript>().GetIndex()))
-                    {
-                        RequestMove(color);
-                        break;
-                    }
-                }
+                return hit.transform.GetComponent<TileScript>().GetIndex();
             }
-            yield return new WaitForSeconds(Time.deltaTime);
         }
+        return new IndexPair(width, height);
     }
 
-    IEnumerator RequestAgentMove(TileState color)
+    IndexPair RequestAgentMove(TileState color)
     {
-        Debug.Log("Requesting agent move.");
-        do
-        {
-
-        } while (false);
-        mousePress = false;
-        yield return new WaitForEndOfFrame();
+        return new IndexPair(width, height);
     }
     #region Turn Tiles
      void TurnTiles(IndexPair index, TileState turnTo)
