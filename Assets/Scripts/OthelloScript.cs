@@ -43,14 +43,18 @@ public class OthelloScript : MonoBehaviour
                     break;
             }
         }
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            RefreshTiles();
+        }
     }
 
     bool MakeMove(TileState color, IndexPair move)
     {
         if (Judge.IsTilePlayable(board, move, color))
         {
-            tileGameObjects[move.z, move.x].GetComponent<TileScript>().PlaceTile(color);
             board[move.z, move.x] = color;
+            RefreshTiles();
             return true;
         }
         else return false;
@@ -198,6 +202,7 @@ public class OthelloScript : MonoBehaviour
         board[width / 2, (height / 2) - 1] = TileState.Black;
         board[(width / 2) - 1, height / 2] = TileState.Black;
         RefreshTiles();
+
     }
     void RefreshTiles()
     {
@@ -205,9 +210,17 @@ public class OthelloScript : MonoBehaviour
         {
             for (int j = 0; j < width; j++)
             {
-                tileGameObjects[j, i].transform.GetComponent<TileScript>().PlaceTile(board[j, i]);
+                if (tileGameObjects[j, i].transform.GetComponent<TileScript>().GetTileState() == TileState.Empty)
+                {
+                    tileGameObjects[j, i].transform.GetComponent<TileScript>().PlaceTile(board[j, i]);
+                }
+                else
+                {
+                    if (tileGameObjects[j, i].transform.GetComponent<TileScript>().GetTileState() != board[j, i]) tileGameObjects[j, i].transform.GetComponent<TileScript>().TurnTile(board[j, i]);
+                }
             }
         }
+        
     }
     #endregion
 }

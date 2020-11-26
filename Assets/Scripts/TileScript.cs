@@ -34,6 +34,7 @@ public class TileScript : MonoBehaviour
 
     public void TurnTile(TileState stateToTurn)
     {
+
         pawn.gameObject.SetActive(true);
         switch (stateToTurn)
         {
@@ -80,6 +81,11 @@ public class TileScript : MonoBehaviour
     public IndexPair GetIndex()
     {
         return index;
+    }
+
+    public TileState GetTileState()
+    {
+        return tileState;
     }
 
     IEnumerator TestStates()
