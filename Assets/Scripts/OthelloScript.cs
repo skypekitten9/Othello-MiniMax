@@ -54,6 +54,7 @@ public class OthelloScript : MonoBehaviour
         if (Judge.IsTilePlayable(board, move, color))
         {
             board[move.z, move.x] = color;
+            TurnTiles(move, color);
             RefreshTiles();
             return true;
         }
@@ -110,41 +111,68 @@ public class OthelloScript : MonoBehaviour
 
     bool TurnLane(IndexPair index, TileState turnTo, int directionZ, int directionX, int depth)
     {
-        if (index.z + (directionZ * depth) >= board.GetLength(0)) return false;
-        if (index.x + (directionX * depth) >= board.GetLength(1)) return false;
-        if (index.z + (directionZ * depth) < 0) return false;
-        if (index.x + (directionX * depth) < 0) return false;
-        Debug.Log(index.z + (directionZ * depth) + " " + index.x + (directionX * depth));
+        
+        int z = index.z + (directionZ * depth);
+        int x = index.x + (directionX * depth);
+        Debug.Log(z + " " + x);
+        if (z >= board.GetLength(0)) return false;
+        if (x >= board.GetLength(1)) return false;
+        if (z < 0) return false;
+        if (x < 0) return false;
         switch (turnTo)
         {
             case TileState.Black:
-                if (board[index.z + (directionZ * depth), index.x + (directionX * depth)] == TileState.Black && depth > 1) return true;
-                else if (board[index.z + (directionZ * depth), index.x + (directionX * depth)] == TileState.White)
+                if(board[z, x] == TileState.Empty)
                 {
-                    if (TurnLane(index, turnTo, directionZ, directionX, ++depth))
+                    Debug.Log("Returning false.");
+                    return false;
+                }
+                if(board[z, x] == TileState.Black && depth > 1)
+                {
+                    Debug.Log("Returning true.");
+                    return true;
+                }
+                if (board[z, x] == TileState.White)
+                {
+                    if(TurnLane(index, turnTo, directionZ, directionX, ++depth))
                     {
-                        board[index.z + (directionZ * depth), index.x + (directionX * depth)] = turnTo;
-                        tileGameObjects[index.z + (directionZ * depth), index.x + (directionX * depth)].GetComponent<TileScript>().TurnTile(turnTo);
+                        Debug.Log("Returning true.");
+                        board[z, x] = TileState.Black;
                         return true;
                     }
-                    else return false;
+                    else
+                    {
+                        return false;
+                    }
                 }
-                else return false;
+                break;
             case TileState.White:
-                if (board[index.z + (directionZ * depth), index.x + (directionX * depth)] == TileState.White && depth > 1) return true;
-                else if (board[index.z + (directionZ * depth), index.x + (directionX * depth)] == TileState.Black)
+                if (board[z, x] == TileState.Empty)
+                {
+                    Debug.Log("Returning false.");
+                    return false;
+                }
+                if (board[z, x] == TileState.White && depth > 1)
+                {
+                    Debug.Log("Returning true.");
+                    return true;
+                }
+                if (board[z, x] == TileState.Black)
                 {
                     if (TurnLane(index, turnTo, directionZ, directionX, ++depth))
                     {
-                        board[index.z + (directionZ * depth), index.x + (directionX * depth)] = turnTo;
-                        tileGameObjects[index.z + (directionZ * depth), index.x + (directionX * depth)].GetComponent<TileScript>().TurnTile(turnTo);
+                        Debug.Log("Returning true.");
+                        board[z, x] = TileState.White;
                         return true;
                     }
-                    else return false;
+                    else
+                    {
+                        return false;
+                    }
                 }
-                else return false;
+                break;
             case TileState.Empty:
-                Debug.LogError("Empty tile should not be turned.");
+                Debug.LogError("Empty tile should not be tested as playable.");
                 break;
             default:
                 break;
