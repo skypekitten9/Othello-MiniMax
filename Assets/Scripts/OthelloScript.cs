@@ -43,10 +43,6 @@ public class OthelloScript : MonoBehaviour
                     break;
             }
         }
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            RefreshTiles();
-        }
     }
 
     bool MakeMove(TileState color, IndexPair move)

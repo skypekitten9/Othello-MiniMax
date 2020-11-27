@@ -5,31 +5,31 @@ using UnityEngine;
 public enum TileState { Black, White, Empty };
 public class TileScript : MonoBehaviour
 {
+    public Material highlightMaterial;
+    Material groundMaterial;
     TileState tileState;
     Animator animator;
     Transform pawn;
+    Renderer groundRenderer;
     IndexPair index;
 
     void Awake()
     {
         pawn = gameObject.GetComponentInChildren<Transform>().Find("Pawn").transform;
+        groundRenderer = gameObject.GetComponentInChildren<Transform>().Find("Ground").GetComponent<Renderer>();
         animator = gameObject.GetComponentInChildren<Transform>().Find("Pawn").GetComponent<Animator>();
+        groundMaterial = groundRenderer.material;
         PlaceTile(TileState.Empty);
     }
 
-    private void Update()
+    private void OnMouseOver()
     {
-        //Debug to test animation
-        if(Input.GetKeyDown(KeyCode.P) && tileState == TileState.White)
-        {
-            TurnTile(TileState.Black);
-        }
+        groundRenderer.material = highlightMaterial;
+    }
 
-        //Debug to test animation
-        if (Input.GetKeyDown(KeyCode.O) && tileState == TileState.Black)
-        {
-            TurnTile(TileState.White);
-        }
+    private void OnMouseExit()
+    {
+        groundRenderer.material = groundMaterial;
     }
 
     public void TurnTile(TileState stateToTurn)
