@@ -42,21 +42,15 @@ public class OthelloScript : MonoBehaviour
         }
         if (!win)
         {
+            if (!Judge.IsBoardPlayable(board, currentColor))
+            {
+                Debug.Log("Skipped!");
+                SwitchColor(currentColor);
+            }
             IndexPair move = RequestMove(currentColor);
             if (MakeMove(currentColor, move))
             {
-                switch (currentColor)
-                {
-                    case TileState.Black:
-                        ChangeColor(TileState.White);
-                        break;
-                    case TileState.White:
-                        ChangeColor(TileState.Black);
-                        break;
-                    default:
-                        Debug.LogError("Color is neither black or white.");
-                        break;
-                }
+                SwitchColor(currentColor);
             }
         }
     }
@@ -102,7 +96,7 @@ public class OthelloScript : MonoBehaviour
     }
     bool DetermineWin()
     {
-        if (DetermineSkip(TileState.Black) && DetermineSkip(TileState.White))
+        if (!Judge.IsBoardPlayable(board, TileState.Black) && !Judge.IsBoardPlayable(board, TileState.White))
         {
             return true;
         }
@@ -114,12 +108,6 @@ public class OthelloScript : MonoBehaviour
             }
         }
         return true;
-    }
-
-    bool DetermineSkip(TileState colorToCheck)
-    {
-        return false;
-
     }
     #endregion
     #region Make & Request Moves
@@ -175,6 +163,22 @@ public class OthelloScript : MonoBehaviour
     {
         UI_Script.Instance.DisplayTurn(changeToColor);
         currentColor = changeToColor;
+    }
+
+    void SwitchColor(TileState switchFromColor)
+    {
+        switch (switchFromColor)
+        {
+            case TileState.Black:
+                ChangeColor(TileState.White);
+                break;
+            case TileState.White:
+                ChangeColor(TileState.Black);
+                break;
+            default:
+                Debug.LogError("Color is neither black or white.");
+                break;
+        }
     }
     #endregion
     #region Turn Tiles

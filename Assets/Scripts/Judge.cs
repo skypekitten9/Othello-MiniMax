@@ -4,6 +4,18 @@ using UnityEngine;
 
 public static class Judge
 {
+
+    public static bool IsBoardPlayable(TileState[,] board, TileState colorCheck)
+    {
+        for (int i = 0; i < board.GetLength(1); i++)
+        {
+            for (int j = 0; j < board.GetLength(0); j++)
+            {
+                if (IsTilePlayable(board, new IndexPair(j, i), colorCheck)) return true;
+            }
+        }
+        return false;
+    }
     public static bool IsTilePlayable(TileState[,] board, IndexPair index, TileState turnTo)
     {
         if (index.z >= board.GetLength(0)) return false;
