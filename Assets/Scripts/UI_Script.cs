@@ -33,7 +33,7 @@ public class UI_Script : MonoBehaviour
                 gameObject.transform.Find("Draw").GetComponent<Image>().enabled = true;
                 break;
             default:
-                Debug.LogError("Win can only be displayed to white or black.");
+                Debug.LogError("Win can only be displayed to white or black or empty.");
                 break;
         }
     }
@@ -44,6 +44,8 @@ public class UI_Script : MonoBehaviour
         gameObject.transform.Find("Return").GetComponent<Image>().enabled = false;
         gameObject.transform.Find("BlackWins").GetComponent<Image>().enabled = false;
         gameObject.transform.Find("WhiteWins").GetComponent<Image>().enabled = false;
+        gameObject.transform.Find("Draw").GetComponent<Image>().enabled = false;
+
     }
 
     public void DisplayTurn(TileState turnColor)
