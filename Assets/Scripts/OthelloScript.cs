@@ -31,6 +31,10 @@ public class OthelloScript : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            UI_Script.Instance.DisplayWin(currentColor);
+        }
         if (reset)
         {
             ResetBoard();

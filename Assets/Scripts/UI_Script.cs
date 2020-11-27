@@ -17,14 +17,30 @@ public class UI_Script : MonoBehaviour
             instance = this;
     }
 
-    void DisplayWin(TileState winColor)
+    public void DisplayWin(TileState winColor)
     {
-
+        gameObject.transform.Find("Blackout").GetComponent<Image>().enabled = true;
+        gameObject.transform.Find("Return").GetComponent<Image>().enabled = true;
+        switch (winColor)
+        {
+            case TileState.Black:
+                gameObject.transform.Find("BlackWins").GetComponent<Image>().enabled = true;
+                break;
+            case TileState.White:
+                gameObject.transform.Find("WhiteWins").GetComponent<Image>().enabled = true;
+                break;
+            default:
+                Debug.LogError("Win can only be displayed to white or black.");
+                break;
+        }
     }
 
-    void HideWin()
+    public void HideWin()
     {
-
+        gameObject.transform.Find("Blackout").GetComponent<Image>().enabled = false;
+        gameObject.transform.Find("Return").GetComponent<Image>().enabled = false;
+        gameObject.transform.Find("BlackWins").GetComponent<Image>().enabled = false;
+        gameObject.transform.Find("WhiteWins").GetComponent<Image>().enabled = false;
     }
 
     public void DisplayTurn(TileState turnColor)
