@@ -24,7 +24,14 @@ public class TileScript : MonoBehaviour
 
     private void OnMouseOver()
     {
-        groundRenderer.material = highlightMaterial;
+        if(tileState == TileState.Empty)
+        {
+            groundRenderer.material = highlightMaterial;
+        }
+        else
+        {
+            groundRenderer.material = groundMaterial;
+        }
     }
 
     private void OnMouseExit()
