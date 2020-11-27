@@ -11,7 +11,7 @@ public class OthelloScript : MonoBehaviour
     public GameObject tilePrefab;
     public PlayerType playerOneType, playerTwoType;
     public int width, height;
-    bool reset;
+    bool reset, win;
     TileState currentColor;
     int spacing;
     Vector3 origin;
@@ -19,6 +19,7 @@ public class OthelloScript : MonoBehaviour
     private void Awake()
     {
         reset = false;
+        win = false;
         origin = transform.position;
         currentColor = TileState.Black;
         SpawnBoard(origin, width, height);
@@ -31,33 +32,96 @@ public class OthelloScript : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.N))
+        if (DetermineWin() && !win)
         {
-            UI_Script.Instance.DisplayWin(currentColor);
+            HandleWin();
         }
         if (reset)
         {
             ResetBoard();
         }
-        IndexPair move = RequestMove(currentColor);
-        if (MakeMove(currentColor, move))
+        if (!win)
         {
-            switch (currentColor)
+            IndexPair move = RequestMove(currentColor);
+            if (MakeMove(currentColor, move))
             {
-                case TileState.Black:
-                    ChangeColor(TileState.White);
-                    break;
-                case TileState.White:
-                    ChangeColor(TileState.Black);
-                    break;
-                default:
-                    Debug.LogError("Color is neither black or white.");
-                    break;
+                switch (currentColor)
+                {
+                    case TileState.Black:
+                        ChangeColor(TileState.White);
+                        break;
+                    case TileState.White:
+                        ChangeColor(TileState.Black);
+                        break;
+                    default:
+                        Debug.LogError("Color is neither black or white.");
+                        break;
+                }
             }
         }
     }
+    #region Debug
+    void PrintBoard()
+    {
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                Debug.Log(board[j, i]);
+            }
+        }
+    }
+    #endregion
+    #region Conditions
+    void HandleWin()
+    {
+        win = true;
+        int blackCount = 0;
+        int whiteCount = 0;
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                if (board[j, i] == TileState.Black) blackCount++;
+                if (board[j, i] == TileState.White) whiteCount++;
+            }
+        }
 
+        if (blackCount > whiteCount)
+        {
+            UI_Script.Instance.DisplayWin(TileState.Black);
+        }
+        else if(whiteCount > blackCount)
+        {
+            UI_Script.Instance.DisplayWin(TileState.White);
+        }
+        else
+        {
+            UI_Script.Instance.DisplayWin(TileState.Empty);
+        }
+    }
+    bool DetermineWin()
+    {
+        if (DetermineSkip(TileState.Black) && DetermineSkip(TileState.White))
+        {
+            return true;
+        }
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                if (board[j, i] == TileState.Empty) return false;
+            }
+        }
+        return true;
+    }
 
+    bool DetermineSkip(TileState colorToCheck)
+    {
+        return false;
+
+    }
+    #endregion
     #region Make & Request Moves
     bool MakeMove(TileState color, IndexPair move)
     {
@@ -131,7 +195,6 @@ public class OthelloScript : MonoBehaviour
         
         int z = index.z + (directionZ * depth);
         int x = index.x + (directionX * depth);
-        Debug.Log(z + " " + x);
         if (z >= board.GetLength(0)) return false;
         if (x >= board.GetLength(1)) return false;
         if (z < 0) return false;
@@ -141,19 +204,16 @@ public class OthelloScript : MonoBehaviour
             case TileState.Black:
                 if(board[z, x] == TileState.Empty)
                 {
-                    Debug.Log("Returning false.");
                     return false;
                 }
                 if(board[z, x] == TileState.Black && depth > 1)
                 {
-                    Debug.Log("Returning true.");
                     return true;
                 }
                 if (board[z, x] == TileState.White)
                 {
                     if(TurnLane(index, turnTo, directionZ, directionX, ++depth))
                     {
-                        Debug.Log("Returning true.");
                         board[z, x] = TileState.Black;
                         return true;
                     }
@@ -166,19 +226,16 @@ public class OthelloScript : MonoBehaviour
             case TileState.White:
                 if (board[z, x] == TileState.Empty)
                 {
-                    Debug.Log("Returning false.");
                     return false;
                 }
                 if (board[z, x] == TileState.White && depth > 1)
                 {
-                    Debug.Log("Returning true.");
                     return true;
                 }
                 if (board[z, x] == TileState.Black)
                 {
                     if (TurnLane(index, turnTo, directionZ, directionX, ++depth))
                     {
-                        Debug.Log("Returning true.");
                         board[z, x] = TileState.White;
                         return true;
                     }
@@ -287,6 +344,7 @@ public class OthelloScript : MonoBehaviour
             }
         }
         reset = false;
+        win = false;
         SpawnStartPawns(width, height);
     }
 

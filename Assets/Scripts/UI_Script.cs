@@ -29,6 +29,9 @@ public class UI_Script : MonoBehaviour
             case TileState.White:
                 gameObject.transform.Find("WhiteWins").GetComponent<Image>().enabled = true;
                 break;
+            case TileState.Empty:
+                gameObject.transform.Find("Draw").GetComponent<Image>().enabled = true;
+                break;
             default:
                 Debug.LogError("Win can only be displayed to white or black.");
                 break;
