@@ -27,9 +27,22 @@ public class UI_Script : MonoBehaviour
 
     }
 
-    void DisplayTurn(TileState turnColor)
+    public void DisplayTurn(TileState turnColor)
     {
-
+        switch (turnColor)
+        {
+            case TileState.Black:
+                gameObject.transform.Find("BlacksTurn").GetComponent<Image>().enabled = true;
+                gameObject.transform.Find("WhitesTurn").GetComponent<Image>().enabled = false;
+                break;
+            case TileState.White:
+                gameObject.transform.Find("BlacksTurn").GetComponent<Image>().enabled = false;
+                gameObject.transform.Find("WhitesTurn").GetComponent<Image>().enabled = true;
+                break;
+            default:
+                Debug.LogError("Turn can only be changed to white or black.");
+                break;
+        }
     }
 
     public void SetRefferences(Vector3 topWorldPosition, Vector3 bottomWorldPosition, Vector3 leftWorldPosition, Vector3 rightWorldPosition)

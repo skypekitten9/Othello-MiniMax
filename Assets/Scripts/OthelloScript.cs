@@ -105,6 +105,7 @@ public class OthelloScript : MonoBehaviour
 
     void ChangeColor(TileState changeToColor)
     {
+        UI_Script.Instance.DisplayTurn(changeToColor);
         currentColor = changeToColor;
     }
     #endregion
