@@ -37,10 +37,10 @@ public class OthelloScript : MonoBehaviour
             switch (currentColor)
             {
                 case TileState.Black:
-                    currentColor = TileState.White;
+                    ChangeColor(TileState.White);
                     break;
                 case TileState.White:
-                    currentColor = TileState.Black;
+                    ChangeColor(TileState.Black);
                     break;
                 default:
                     Debug.LogError("Color is neither black or white.");
@@ -49,6 +49,8 @@ public class OthelloScript : MonoBehaviour
         }
     }
 
+
+    #region Make & Request Moves
     bool MakeMove(TileState color, IndexPair move)
     {
         if (Judge.IsTilePlayable(board, move, color))
@@ -96,8 +98,14 @@ public class OthelloScript : MonoBehaviour
     {
         return new IndexPair(width, height);
     }
+
+    void ChangeColor(TileState changeToColor)
+    {
+        currentColor = changeToColor;
+    }
+    #endregion
     #region Turn Tiles
-     void TurnTiles(IndexPair index, TileState turnTo)
+    void TurnTiles(IndexPair index, TileState turnTo)
     {
         TurnLane(index, turnTo, 0, 1, 1);
         TurnLane(index, turnTo, 1, 1, 1);
@@ -250,9 +258,14 @@ public class OthelloScript : MonoBehaviour
         }
     }
 
+    void SpawnRefferencesUI()
+    {
+
+    }
+
     void ResetBoard()
     {
-        currentColor = TileState.Black;
+        ChangeColor(TileState.Black);
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
