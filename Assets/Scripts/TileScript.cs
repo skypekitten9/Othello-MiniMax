@@ -19,7 +19,7 @@ public class TileScript : MonoBehaviour
         groundRenderer = gameObject.GetComponentInChildren<Transform>().Find("Ground").GetComponent<Renderer>();
         animator = gameObject.GetComponentInChildren<Transform>().Find("Pawn").GetComponent<Animator>();
         groundMaterial = groundRenderer.material;
-        PlaceTile(TileState.Empty);
+        PlaceTile(TileState.Empty, false);
     }
 
     private void OnMouseOver()
@@ -60,15 +60,17 @@ public class TileScript : MonoBehaviour
         tileState = stateToTurn;
     }
 
-    public void PlaceTile(TileState stateToTurn)
+    public void PlaceTile(TileState stateToTurn, bool sound)
     {
         pawn.gameObject.SetActive(true);
         switch (stateToTurn)
         {
             case TileState.Black:
+                if (sound) SFXManager.Instance.PlayPlace();
                 animator.Play("PlaceBlack");
                 break;
             case TileState.White:
+                if (sound) SFXManager.Instance.PlayPlace();
                 animator.Play("PlaceWhite");
                 break;
             case TileState.Empty:

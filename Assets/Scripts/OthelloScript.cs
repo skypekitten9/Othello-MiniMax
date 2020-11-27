@@ -118,6 +118,7 @@ public class OthelloScript : MonoBehaviour
         if (Judge.IsTilePlayable(board, move, color))
         {
             board[move.z, move.x] = color;
+            tileGameObjects[move.z, move.x].transform.GetComponent<TileScript>().PlaceTile(color, true);
             TurnTiles(move, color);
             RefreshTiles();
             agentTimer = agentDelay;
@@ -326,7 +327,7 @@ public class OthelloScript : MonoBehaviour
             {
                 if (tileGameObjects[j, i].transform.GetComponent<TileScript>().GetTileState() == TileState.Empty)
                 {
-                    tileGameObjects[j, i].transform.GetComponent<TileScript>().PlaceTile(board[j, i]);
+                    tileGameObjects[j, i].transform.GetComponent<TileScript>().PlaceTile(board[j, i], false);
                 }
                 else
                 {
