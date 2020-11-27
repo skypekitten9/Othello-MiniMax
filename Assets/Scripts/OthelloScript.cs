@@ -74,6 +74,7 @@ public class OthelloScript : MonoBehaviour
         win = true;
         int blackCount = 0;
         int whiteCount = 0;
+        SFXManager.Instance.PlayWin();
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
