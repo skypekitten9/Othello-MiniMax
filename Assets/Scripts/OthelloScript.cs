@@ -131,7 +131,7 @@ public class OthelloScript : MonoBehaviour
                 if (playerOneType == PlayerType.Agent) return RequestAgentMove(TileState.Black);
                 else return RequestPlayerMove(TileState.Black);
             case TileState.White:
-                if (playerOneType == PlayerType.Agent) return RequestAgentMove(TileState.White);
+                if (playerTwoType == PlayerType.Agent) return RequestAgentMove(TileState.White);
                 else return RequestPlayerMove(TileState.White);
             default:
                 Debug.LogError("Color is neither black or white.");
@@ -156,7 +156,7 @@ public class OthelloScript : MonoBehaviour
 
     IndexPair RequestAgentMove(TileState color)
     {
-        return new IndexPair(width, height);
+        return Agent.CalculateMove(board, color, 10);
     }
 
     void ChangeColor(TileState changeToColor)

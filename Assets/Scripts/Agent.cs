@@ -6,7 +6,12 @@ public static class Agent
 {
     public static IndexPair CalculateMove(TileState[,] board, TileState color, int depth)
     {
-        return new IndexPair(0, 0);
+        List<IndexPair> availableMoves = Judge.GetPlayableTiles(board, color);
+        if (availableMoves.Count == 0)
+        {
+            return new IndexPair(board.GetLength(0), board.GetLength(1));
+        }
+        return availableMoves[UnityEngine.Random.Range(0, availableMoves.Count)];
     }
 
     public static float EvaluateBoard(TileState[,] board)
