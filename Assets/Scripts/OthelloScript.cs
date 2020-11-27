@@ -27,6 +27,10 @@ public class OthelloScript : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetBoard();
+        }
         IndexPair move = RequestMove(currentColor);
         if (MakeMove(currentColor, move))
         {
@@ -244,12 +248,19 @@ public class OthelloScript : MonoBehaviour
                 }
             }
         }
-        
     }
 
     void ResetBoard()
     {
-
+        currentColor = TileState.Black;
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                board[j, i] = TileState.Empty;
+            }
+        }
+        SpawnStartPawns(width, height);
     }
     #endregion
 }
