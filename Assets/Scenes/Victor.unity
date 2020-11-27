@@ -1410,6 +1410,7 @@ MonoBehaviour:
   playerTwoType: 0
   width: 8
   height: 8
+  agentDelay: 1
 --- !u!4 &1534466106
 Transform:
   m_ObjectHideFlags: 0

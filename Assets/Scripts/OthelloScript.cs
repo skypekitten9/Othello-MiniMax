@@ -11,13 +11,15 @@ public class OthelloScript : MonoBehaviour
     public GameObject tilePrefab;
     public PlayerType playerOneType, playerTwoType;
     public int width, height;
+    public float agentDelay;
+    float agentTimer;
     bool reset, win;
     TileState currentColor;
-    int spacing;
     Vector3 origin;
 
     private void Awake()
     {
+        agentTimer = agentDelay;
         reset = false;
         win = false;
         origin = transform.position;
@@ -118,6 +120,7 @@ public class OthelloScript : MonoBehaviour
             board[move.z, move.x] = color;
             TurnTiles(move, color);
             RefreshTiles();
+            agentTimer = agentDelay;
             return true;
         }
         else return false;
@@ -156,7 +159,12 @@ public class OthelloScript : MonoBehaviour
 
     IndexPair RequestAgentMove(TileState color)
     {
-        return Agent.CalculateMove(board, color, 10);
+        agentTimer -= Time.deltaTime;
+        if (agentTimer < 0)
+        {
+            return Agent.CalculateMove(board, color, 10);
+        }
+        else return new IndexPair(width, height);
     }
 
     void ChangeColor(TileState changeToColor)
@@ -347,6 +355,7 @@ public class OthelloScript : MonoBehaviour
                 board[j, i] = TileState.Empty;
             }
         }
+        agentTimer = agentDelay;
         reset = false;
         win = false;
         SpawnStartPawns(width, height);
