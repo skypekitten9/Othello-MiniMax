@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum PlayerType { Human, Agent };
 public class OthelloScript : MonoBehaviour
@@ -10,15 +11,18 @@ public class OthelloScript : MonoBehaviour
     public GameObject tilePrefab;
     public PlayerType playerOneType, playerTwoType;
     public int width, height;
+    bool reset;
     TileState currentColor;
     int spacing;
     Vector3 origin;
 
     private void Awake()
     {
+        reset = false;
         origin = transform.position;
         currentColor = TileState.Black;
         SpawnBoard(origin, width, height);
+        SpawnRefferencesUI(width, height);
     }
     void Start()
     {
@@ -27,7 +31,7 @@ public class OthelloScript : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (reset)
         {
             ResetBoard();
         }
@@ -258,9 +262,13 @@ public class OthelloScript : MonoBehaviour
         }
     }
 
-    void SpawnRefferencesUI()
+    void SpawnRefferencesUI(int width, int height)
     {
-
+        Vector3 top = new Vector3(-1, 0, (width/2) - 0.5f);
+        Vector3 bottom = new Vector3(height, 0, (width / 2) - 0.5f);
+        Vector3 left = new Vector3((height/2) - 0.5f, 0, -1f);
+        Vector3 right = new Vector3((height / 2) - 0.5f, 0, width);
+        UI_Script.Instance.SetRefferences(top, bottom, left, right);
     }
 
     void ResetBoard()
@@ -273,7 +281,13 @@ public class OthelloScript : MonoBehaviour
                 board[j, i] = TileState.Empty;
             }
         }
+        reset = false;
         SpawnStartPawns(width, height);
+    }
+
+    public void RequestReset()
+    {
+        reset = true;
     }
     #endregion
 }
