@@ -14,11 +14,13 @@ public class OthelloScript : MonoBehaviour
     public float agentDelay;
     float agentTimer;
     bool reset, win;
+    Agent agent;
     TileState currentColor;
     Vector3 origin;
 
     private void Awake()
     {
+        agent = new Agent(); 
         agentTimer = agentDelay;
         reset = false;
         win = false;
@@ -164,7 +166,7 @@ public class OthelloScript : MonoBehaviour
         agentTimer -= Time.deltaTime;
         if (agentTimer < 0)
         {
-            return Agent.CalculateMove(board, color, 10);
+            return agent.CalculateMove(board, color, 10);
         }
         else return new IndexPair(width, height);
     }
