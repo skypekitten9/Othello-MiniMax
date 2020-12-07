@@ -11,7 +11,22 @@ public static class Agent
         {
             return new IndexPair(board.GetLength(0), board.GetLength(1));
         }
+
+        IndexPair moveToReturn = availableMoves[0];
+        int maxValue = MiniMax(board, color, depth);
+        for (int i = 1; i < availableMoves.Count; i++)
+        {
+            if (MiniMax(board, color, depth) > maxValue)
+            {
+                moveToReturn = availableMoves[i];
+            }
+        }
         return availableMoves[UnityEngine.Random.Range(0, availableMoves.Count)];
+    }
+
+    public static int MiniMax(TileState[,] board, TileState color, int depth)
+    {
+        return 1;
     }
 
     public static float EvaluateBoard(TileState[,] board, TileState color)
