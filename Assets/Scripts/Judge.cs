@@ -75,8 +75,80 @@ public static class Judge
         return false;
     }
 
-    public static List<IndexPair> GetPlayableTiles(TileState[,] board)
+    public static TileState[,] SimulateTurn(TileState[,] board, IndexPair index, TileState turnTo)
     {
-        return new List<IndexPair>();
+        SimulateLane(board, index, turnTo, 0, 1, 1);
+        SimulateLane(board, index, turnTo, 1, 1, 1);
+        SimulateLane(board, index, turnTo, 1, 0, 1);
+        SimulateLane(board, index, turnTo, 1, -1, 1);
+        SimulateLane(board, index, turnTo, 0, -1, 1);
+        SimulateLane(board, index, turnTo, -1, -1, 1);
+        SimulateLane(board, index, turnTo, -1, 0, 1);
+        SimulateLane(board, index, turnTo, -1, 1, 1);
+        return board;
+    }
+
+    public static bool SimulateLane(TileState[,] board, IndexPair index, TileState turnTo, int directionZ, int directionX, int depth)
+    {
+
+        int z = index.z + (directionZ * depth);
+        int x = index.x + (directionX * depth);
+        if (z >= board.GetLength(0)) return false;
+        if (x >= board.GetLength(1)) return false;
+        if (z < 0) return false;
+        if (x < 0) return false;
+        switch (turnTo)
+        {
+            case TileState.Black:
+                if (board[z, x] == TileState.Empty)
+                {
+                    return false;
+                }
+                if (board[z, x] == TileState.Black && depth > 1)
+                {
+                    return true;
+                }
+                if (board[z, x] == TileState.White)
+                {
+                    if (SimulateLane(board, index, turnTo, directionZ, directionX, ++depth))
+                    {
+                        board[z, x] = TileState.Black;
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                break;
+            case TileState.White:
+                if (board[z, x] == TileState.Empty)
+                {
+                    return false;
+                }
+                if (board[z, x] == TileState.White && depth > 1)
+                {
+                    return true;
+                }
+                if (board[z, x] == TileState.Black)
+                {
+                    if (SimulateLane(board, index, turnTo, directionZ, directionX, ++depth))
+                    {
+                        board[z, x] = TileState.White;
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                break;
+            case TileState.Empty:
+                Debug.LogError("Empty tile should not be tested as playable.");
+                break;
+            default:
+                break;
+        }
+        return false;
     }
 }

@@ -120,7 +120,7 @@ public class OthelloScript : MonoBehaviour
         {
             board[move.z, move.x] = color;
             tileGameObjects[move.z, move.x].transform.GetComponent<TileScript>().PlaceTile(color, true);
-            TurnTiles(move, color);
+            Judge.SimulateTurn(board, move, color);
             RefreshTiles();
             agentTimer = agentDelay;
             return true;
@@ -189,83 +189,6 @@ public class OthelloScript : MonoBehaviour
                 Debug.LogError("Color is neither black or white.");
                 break;
         }
-    }
-    #endregion
-    #region Turn Tiles
-    void TurnTiles(IndexPair index, TileState turnTo)
-    {
-        TurnLane(index, turnTo, 0, 1, 1);
-        TurnLane(index, turnTo, 1, 1, 1);
-        TurnLane(index, turnTo, 1, 0, 1);
-        TurnLane(index, turnTo, 1, -1, 1);
-        TurnLane(index, turnTo, 0, -1, 1);
-        TurnLane(index, turnTo, -1, -1, 1);
-        TurnLane(index, turnTo, -1, 0, 1);
-        TurnLane(index, turnTo, -1, 1, 1);
-    }
-
-    bool TurnLane(IndexPair index, TileState turnTo, int directionZ, int directionX, int depth)
-    {
-        
-        int z = index.z + (directionZ * depth);
-        int x = index.x + (directionX * depth);
-        if (z >= board.GetLength(0)) return false;
-        if (x >= board.GetLength(1)) return false;
-        if (z < 0) return false;
-        if (x < 0) return false;
-        switch (turnTo)
-        {
-            case TileState.Black:
-                if(board[z, x] == TileState.Empty)
-                {
-                    return false;
-                }
-                if(board[z, x] == TileState.Black && depth > 1)
-                {
-                    return true;
-                }
-                if (board[z, x] == TileState.White)
-                {
-                    if(TurnLane(index, turnTo, directionZ, directionX, ++depth))
-                    {
-                        board[z, x] = TileState.Black;
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                break;
-            case TileState.White:
-                if (board[z, x] == TileState.Empty)
-                {
-                    return false;
-                }
-                if (board[z, x] == TileState.White && depth > 1)
-                {
-                    return true;
-                }
-                if (board[z, x] == TileState.Black)
-                {
-                    if (TurnLane(index, turnTo, directionZ, directionX, ++depth))
-                    {
-                        board[z, x] = TileState.White;
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                break;
-            case TileState.Empty:
-                Debug.LogError("Empty tile should not be tested as playable.");
-                break;
-            default:
-                break;
-        }
-        return false;
     }
     #endregion
     #region Player Settings
