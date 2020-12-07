@@ -14,8 +14,27 @@ public static class Agent
         return availableMoves[UnityEngine.Random.Range(0, availableMoves.Count)];
     }
 
-    public static float EvaluateBoard(TileState[,] board)
+    public static float EvaluateBoard(TileState[,] board, TileState color)
     {
-        return 1f;
+        int nrOfWhites = 0, nrOfBlacks = 0;
+
+        for (int i = 0; i < board.GetLength(1); i++)
+        {
+            for (int j = 0; j < board.GetLength(0); j++)
+            {
+                if (board[j, i] == TileState.Black)
+                {
+                    nrOfBlacks++;
+                }
+                else if (board[j, i] == TileState.White)
+                {
+                    nrOfWhites++;
+                }
+            }
+        }
+
+        int evalValue = nrOfBlacks - nrOfWhites;
+
+        return evalValue;
     }
 }
