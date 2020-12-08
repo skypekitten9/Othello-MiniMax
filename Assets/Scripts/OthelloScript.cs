@@ -53,17 +53,19 @@ public class OthelloScript : MonoBehaviour
             if (MakeMove(currentColor, move))
             {
                 SwitchColor(currentColor);
+                PrintBoard();
             }
         }
     }
     #region Debug
     void PrintBoard()
     {
+        Debug.Log("Printing board state...");
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
             {
-                Debug.Log(board[j, i]);
+                Debug.Log("Tile [" + j + "," + i + "] = " + board[j, i]);
             }
         }
     }

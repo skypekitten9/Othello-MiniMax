@@ -4,8 +4,11 @@ using UnityEngine;
 
 public static class Agent
 {
+    public static int nodeCount = 0;
+    public static int depthReached = 10;
     public static IndexPair CalculateMove(TileState[,] board, TileState color, int depth)
     {
+        Debug.Log("Starting MiniMax-search for " + color + "...");
         int alpha = int.MinValue;
         int beta = int.MaxValue;
         List<IndexPair> availableMoves = Judge.GetPlayableTiles(board, color);
@@ -21,15 +24,15 @@ public static class Agent
             switch (color)
             {
                 case TileState.Black:
-                    int maxValue = MiniMax(Judge.SimulateTurn(board, availableMoves[0], color), TileState.White, --depth, alpha, beta);
-                    if (MiniMax(Judge.SimulateTurn(board, availableMoves[i], color), TileState.White, --depth, alpha, beta) > maxValue)
+                    int maxValue = MiniMax(Judge.SimulateTurn(board, availableMoves[0], color), TileState.White, depth - 1, alpha, beta);
+                    if (MiniMax(Judge.SimulateTurn(board, availableMoves[i], color), TileState.White, depth - 1, alpha, beta) > maxValue)
                     {
                         moveToReturn = availableMoves[i];
                     }
                     break;
                 case TileState.White:
-                    int minValue = MiniMax(Judge.SimulateTurn(board, availableMoves[0], color), TileState.Black, --depth, alpha, beta);
-                    if (MiniMax(Judge.SimulateTurn(board, availableMoves[i], color), TileState.Black, --depth, alpha, beta) < minValue)
+                    int minValue = MiniMax(Judge.SimulateTurn(board, availableMoves[0], color), TileState.Black, depth - 1, alpha, beta);
+                    if (MiniMax(Judge.SimulateTurn(board, availableMoves[i], color), TileState.Black, depth - 1, alpha, beta) < minValue)
                     {
                         moveToReturn = availableMoves[i];
                     }
@@ -39,21 +42,27 @@ public static class Agent
                     break;
             }
         }
+        Debug.Log("Nodes examined: " + nodeCount);
+        Debug.Log("Depth reached: " + depthReached);
+        Debug.Log("MiniMax-search done.");
+        depthReached = 10;
+        nodeCount = 0;
         return moveToReturn;
     }
 
     public static int MiniMax(TileState[,] board, TileState color, int depth, int alpha, int beta)
     {
-        if (depth <= 0) return EvaluateBoard(board, color);
-
+        nodeCount++;
+        depthReached = 10 - depth;
         List<IndexPair> playableMoves = Judge.GetPlayableTiles(board, color);
+        if (depth <= 0 || playableMoves.Count <= 0) return EvaluateBoard(board, color);
         switch (color)
         {
             case TileState.Black:
                 int maxValue = int.MinValue;
                 foreach (IndexPair move in playableMoves)
                 {
-                    int eval = MiniMax(Judge.SimulateTurn(board, move, color), TileState.White, --depth, alpha, beta);
+                    int eval = MiniMax(Judge.SimulateTurn(board, move, color), TileState.White, depth - 1, alpha, beta);
                     maxValue = Mathf.Max(maxValue, eval);
                     alpha = Mathf.Max(alpha, eval);
                     if (beta <= alpha)
@@ -67,7 +76,7 @@ public static class Agent
                 int minValue = int.MaxValue;
                 foreach (IndexPair move in playableMoves)
                 {
-                    int eval = MiniMax(Judge.SimulateTurn(board, move, color), TileState.Black, --depth, alpha, beta);
+                    int eval = MiniMax(Judge.SimulateTurn(board, move, color), TileState.Black, depth - 1, alpha, beta);
                     maxValue = Mathf.Min(minValue, eval);
                     beta = Mathf.Min(beta, eval);
                     if (beta <= alpha)
