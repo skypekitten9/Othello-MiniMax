@@ -10,7 +10,7 @@ public class OthelloScript : MonoBehaviour
     GameObject[,] tileGameObjects;
     public GameObject tilePrefab;
     public PlayerType playerOneType, playerTwoType;
-    public int width, height;
+    public int width, height, depth;
     public float agentDelay;
     float agentTimer;
     bool reset, win;
@@ -120,7 +120,7 @@ public class OthelloScript : MonoBehaviour
         {
             board[move.z, move.x] = color;
             tileGameObjects[move.z, move.x].transform.GetComponent<TileScript>().PlaceTile(color, true);
-            Judge.SimulateTurn(board, move, color);
+            board = Judge.SimulateTurn(board, move, color);
             RefreshTiles();
             agentTimer = agentDelay;
             return true;
@@ -164,7 +164,7 @@ public class OthelloScript : MonoBehaviour
         agentTimer -= Time.deltaTime;
         if (agentTimer < 0)
         {
-            return Agent.CalculateMove(board, color, 10);
+            return Agent.CalculateMove(board, color, depth);
         }
         else return new IndexPair(width, height);
     }

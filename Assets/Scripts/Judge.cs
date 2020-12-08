@@ -75,19 +75,36 @@ public static class Judge
         return false;
     }
 
+    //Returns a new board with the move played
     public static TileState[,] SimulateTurn(TileState[,] board, IndexPair index, TileState turnTo)
     {
-        SimulateLane(board, index, turnTo, 0, 1, 1);
-        SimulateLane(board, index, turnTo, 1, 1, 1);
-        SimulateLane(board, index, turnTo, 1, 0, 1);
-        SimulateLane(board, index, turnTo, 1, -1, 1);
-        SimulateLane(board, index, turnTo, 0, -1, 1);
-        SimulateLane(board, index, turnTo, -1, -1, 1);
-        SimulateLane(board, index, turnTo, -1, 0, 1);
-        SimulateLane(board, index, turnTo, -1, 1, 1);
-        return board;
+        TileState[,] result = CopyBoard(board);
+        SimulateLane(result, index, turnTo, 0, 1, 1);
+        SimulateLane(result, index, turnTo, 1, 1, 1);
+        SimulateLane(result, index, turnTo, 1, 0, 1);
+        SimulateLane(result, index, turnTo, 1, -1, 1);
+        SimulateLane(result, index, turnTo, 0, -1, 1);
+        SimulateLane(result, index, turnTo, -1, -1, 1);
+        SimulateLane(result, index, turnTo, -1, 0, 1);
+        SimulateLane(result, index, turnTo, -1, 1, 1);
+        return result;
     }
 
+    //Returns a copy of a board
+    public static TileState[,] CopyBoard(TileState[,] board)
+    {
+        TileState[,] result = new TileState[board.GetLength(0), board.GetLength(1)];
+        for (int i = 0; i < board.GetLength(1); i++)
+        {
+            for (int j = 0; j < board.GetLength(0); j++)
+            {
+                result[j, i] = board[j, i];
+            }
+        }
+        return result;
+    }
+
+    
     public static bool SimulateLane(TileState[,] board, IndexPair index, TileState turnTo, int directionZ, int directionX, int depth)
     {
 
