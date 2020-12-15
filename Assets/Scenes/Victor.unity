@@ -516,5 +516,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Othello
       objectReference: {fileID: 0}
+    - target: {fileID: 3903466206534301784, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 27.200073
+      objectReference: {fileID: 0}
+    - target: {fileID: 3903466206668245678, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -131.30005
+      objectReference: {fileID: 0}
+    - target: {fileID: 3903466206668245678, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 27.199951
+      objectReference: {fileID: 0}
+    - target: {fileID: 3903466206837245019, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 79.599976
+      objectReference: {fileID: 0}
+    - target: {fileID: 3903466206837245019, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 42.19995
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
