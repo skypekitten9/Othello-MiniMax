@@ -516,17 +516,41 @@ PrefabInstance:
       propertyPath: m_Name
       value: Othello
       objectReference: {fileID: 0}
+    - target: {fileID: 3903466205709692197, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3903466206131283334, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3903466206534301784, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 27.200073
       objectReference: {fileID: 0}
+    - target: {fileID: 3903466206534301787, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3903466206668245678, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -131.30005
+      value: -77
       objectReference: {fileID: 0}
     - target: {fileID: 3903466206668245678, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 27.199951
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 3903466206668245678, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 104
+      objectReference: {fileID: 0}
+    - target: {fileID: 3903466206668245678, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 3903466206837245018, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3903466206837245019, guid: 1a89edb6a2821a44bbf34425c98d9d5e, type: 3}
       propertyPath: m_AnchoredPosition.x
